@@ -35,6 +35,49 @@ if ( ! defined( 'WPINC' ) ) {
  */
 require __DIR__ . '/vendor/autoload.php';
 
+// freemius.
+if ( ! function_exists( 'vsg_fs' ) ) {
+	/**
+	 * Create a helper function for easy SDK access.
+	 */
+	function vsg_fs() {
+		global $vsg_fs;
+
+		if ( ! isset( $vsg_fs ) ) {
+			// Activate multisite network integration.
+			if ( ! defined( 'WP_FS__PRODUCT_11789_MULTISITE' ) ) {
+				define( 'WP_FS__PRODUCT_11789_MULTISITE', true );
+			}
+
+			// Include Freemius SDK.
+			require_once __DIR__ . '/freemius/start.php';
+
+			$vsg_fs = fs_dynamic_init(
+				array(
+					'id'             => '11789',
+					'slug'           => 'variation-swatches-and-gallery',
+					'type'           => 'plugin',
+					'public_key'     => 'pk_7a21b9ce7016553430b9df4a42b85',
+					'is_premium'     => false,
+					'has_addons'     => true,
+					'has_paid_plans' => false,
+					'menu'           => array(
+						'slug'       => 'variation-swatches-and-gallery',
+						'first-path' => 'admin.php?page=variation-swatches-and-gallery',
+					),
+				)
+			);
+		}
+
+		return $vsg_fs;
+	}
+
+	// Init Freemius.
+	vsg_fs();
+	// Signal that SDK was initiated.
+	do_action( 'vsg_fs_loaded' );
+}
+
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org

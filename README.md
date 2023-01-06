@@ -8,12 +8,13 @@
 <h1 align="center"><strong>Variation Swatches and Gallery for WooCommerce</strong></h1>
 
 <p align="center">
-  Variation Swatches and Gallery for WooCommerce is ultimate solution for Color, Image, Button and Radio Swatches For WooCommerce Variable Product Attributes 
+  Variation Swatches and Gallery for WooCommerce is ultimate solution for Color, Image, Button and Radio Swatches including Gallery For WooCommerce Variable Product Attributes 
 </p>
 
 ## Features
 
 * 4 Custom attributes, Color, Image, Button and Radio.
+* Different gallery for each variation.
 * Details settings page to customize design and functions.
 * Quick support.
 
