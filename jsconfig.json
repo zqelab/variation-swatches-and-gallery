@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./admin/src/*", "./public/src/*"]
+    },
+    "allowJs": true
+  }
+}

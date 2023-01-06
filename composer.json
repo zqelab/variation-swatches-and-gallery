@@ -1,0 +1,43 @@
+{
+    "name": "zqelab/variation-swatches-and-gallery",
+	"license": "MIT",
+	"version": "1.0.0",
+	"homepage": "https://github.com/zqelab/variation-swatches-and-gallery",
+    "authors": [
+        {
+            "name": "ZQE",
+            "email": "dev@zqe.io"
+        }
+    ],
+	"keywords": [
+		"wordpress",
+		"plugin"
+	],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "wp-coding-standards/wpcs": "dev-develop",
+        "phpcompatibility/phpcompatibility-wp": "*"
+    },
+    "minimum-stability": "dev",
+	"require": {
+        "zqelab/wp-settings-api": "dev-main",
+        "zqelab/wp-term-meta": "dev-master"
+    },
+    "autoload" : {
+        "exclude-from-classmap": [
+        ],
+        "psr-4" : {
+            "Zqe\\": ["includes/", "admin/", "public/"]
+        },
+        "classmap": [
+            "includes",
+            "public",
+            "admin"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

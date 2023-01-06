@@ -1,0 +1,45 @@
+.vsg-preview {
+	width: 30px;
+	height: 30px;
+	border: rgba(0, 0, 0, 0.2) 1px solid;
+	border-radius: 2px;
+}
+#vsg-meta-preview {
+	width: 32px;
+}
+
+.variation-swatches-and-gallery--gallery-image-container h4 {
+    margin: 0;
+    padding-top: 10px;
+  }
+.variation-swatches-and-gallery--gallery-images {
+  display: flex;
+}
+.variation-swatches-and-gallery--gallery-images > li.image {
+    width: 64px;
+    height: 64px;
+    margin-right: 10px;
+	  position: relative;
+}
+.variation-swatches-and-gallery--gallery-images > li.image img{
+    max-width: 100%;
+}
+
+.variation-swatches-and-gallery--remove-galery-image {
+	  position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    text-decoration: none;
+	  display: none;
+}
+.variation-swatches-and-gallery--gallery-images > li.image:hover .variation-swatches-and-gallery--remove-galery-image {
+    display: block;
+}
+.variation-swatches-and-gallery--remove-galery-image .dashicons  {
+	  line-height: 64px;
+    font-size: 64px;
+    font-weight: 400;
+    display: block;
+}
