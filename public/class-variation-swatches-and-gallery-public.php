@@ -439,7 +439,7 @@ class Variation_Swatches_And_Gallery_Public {
 		$color_swatch_style  = $this->plugin->get_option()->get_option( 'color_swatch_style', 'squared' );
 		$color_swatch_style  = apply_filters( 'variation_swatches_and_gallery_options', $color_swatch_style, 'color_swatch_style', $args );
 		$radio_swatch_style  = $this->plugin->get_option()->get_option( 'radio_swatch_style', 'squared' );
-		$color_swatch_style  = apply_filters( 'variation_swatches_and_gallery_options', $radio_swatch_style, 'radio_swatch_style', $args );
+		$radio_swatch_style  = apply_filters( 'variation_swatches_and_gallery_options', $radio_swatch_style, 'radio_swatch_style', $args );
 		$button_swatch_style = $this->plugin->get_option()->get_option( 'button_swatch_style', 'squared' );
 		$button_swatch_style = apply_filters( 'variation_swatches_and_gallery_options', $button_swatch_style, 'button_swatch_style', $args );
 
