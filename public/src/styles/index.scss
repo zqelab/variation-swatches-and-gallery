@@ -287,18 +287,25 @@ body.vsg-body {
 	// selected variation attribute show label
 	&.vsg-selected-variation-attribute-show-label {
 		.variations {
+			th,
 			td {
 				display: block;
+				label,
+				span {
+					display: inline-block;
+				}
 			}
 			tr {
 				margin-bottom: 0px;
 				&:not(:last-child) {
-					td {
+					td,
+					th {
 						border-bottom: 0px;
 					}
 				}
 				&:last-child {
-					td {
+					td,
+					th {
 						&:first-child {
 							border-bottom: 0px;
 						}
