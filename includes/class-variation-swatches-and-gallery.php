@@ -152,7 +152,6 @@ class Variation_Swatches_And_Gallery {
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'settings_init' );
 		$this->loader->add_filter( 'product_attributes_type_selector', $plugin_admin, 'product_attributes_type_selector_filter' );
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'add_attribute_meta' );
-		$this->loader->add_action( sprintf( '%s_edit_form_fields', 'pa_color' ), $plugin_admin, 'edit_meta_fields_for_debuging', 2, 99 );
 
 		$this->loader->add_action( 'woocommerce_product_option_terms', $plugin_admin, 'woocommerce_product_option_terms_action', 10, 3 );
 		$this->loader->add_filter( 'zqe_manage_edit_taxonomy_columns', $plugin_admin, 'zqe_manage_edit_taxonomy_columns_filter', 10, 1 );

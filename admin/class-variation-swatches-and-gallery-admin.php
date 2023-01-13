@@ -258,29 +258,6 @@ class Variation_Swatches_And_Gallery_Admin {
 	}
 
 	/**
-	 * It prints the term meta for the current term.
-	 *
-	 * @param object $tag The term object.
-	 * @param string $taxonomy The taxonomy slug.
-	 *
-	 * @return    void
-	 *
-	 * @since     1.0.0
-	 * @access    public
-	 */
-	public function edit_meta_fields_for_debuging( object $tag, string $taxonomy ) {
-		if ( defined( 'VARIATION_SWATCHES_AND_GALLERY_DEBUG' ) && true === VARIATION_SWATCHES_AND_GALLERY_DEBUG && 'pa_color' === $taxonomy ) {
-			?>
-			<pre class="form-field term-meta-wrap">
-			<?php
-			print_r( get_term_meta( $tag->term_id ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r 
-			?>
-			</pre>
-			<?php
-		}
-	}
-
-	/**
 	 * Function for `woocommerce_product_option_terms` action-hook.
 	 *
 	 * It replaces the default WooCommerce attribute term selection with a multi-select dropdown

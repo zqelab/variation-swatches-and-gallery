@@ -84,7 +84,6 @@ if ( ! function_exists( 'vsg_fs' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'VARIATION_SWATCHES_AND_GALLERY_VERSION', '1.0.0' );
-define( 'VARIATION_SWATCHES_AND_GALLERY_DEBUG', false );
 
 /**
  * The code that runs during plugin activation.
