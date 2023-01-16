@@ -751,7 +751,8 @@ class Variation_Swatches_And_Gallery_Public {
 		} else {
 			$attachment_id = absint( get_term_meta( $term_id, 'pam_image_id', true ) );
 		}
-		$attachment_id = apply_filters( 'vsg_attachment_id', $attachment_id, $args, $term_id, $option );
+
+		$attachment_id = apply_filters( 'vsg_attachment_id', $attachment_id, $args, $term_id, $option, $option_slug );
 
 		$image_swatch_thumbnail_size = $this->plugin->get_option()->get_option( 'image_swatch_thumbnail_size', 'thumbnail' );
 		$image_swatch_thumbnail_size = apply_filters( 'vsg_image_swatch_thumbnail_size', $image_swatch_thumbnail_size, $args );

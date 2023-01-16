@@ -15,7 +15,9 @@
   "ignorePatterns": ["dist", "node_modules", "webpack.*", "config/paths.js"],
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jquery": true,
+    "wp": true
   },
   "extends": ["eslint:recommended", "prettier"],
   "parserOptions": {
