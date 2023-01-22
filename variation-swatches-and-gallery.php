@@ -117,4 +117,4 @@ function run_variation_swatches_and_gallery() {
 	$plugin = new \Zqe\Variation_Swatches_And_Gallery();
 	$plugin->run();
 }
-run_variation_swatches_and_gallery();
+add_action( 'plugins_loaded', 'run_variation_swatches_and_gallery', 25 );

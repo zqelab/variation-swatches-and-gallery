@@ -21,7 +21,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                     let value = $(this).data('value');
-                    if (_VSG.option.advanced.clear_on_reselect && select.val() && select.val() === value) {
+                    if (_VSG.option.single.clear_on_reselect && select.val() && select.val() === value) {
                         select.val('');
                     } else {
                         select.val(value);
@@ -129,10 +129,10 @@
         tooltip: function() {
             this.$element.find('li.vsg-swatch-item').each(function(index, el) {
                 $(this).mouseover(function() {
-                    $(this).find('.vsg-swatch-item-tooltip').fadeIn();
+                    $(this).find('.vsg-swatch-item-tooltip').fadeIn('slow');
                 })
                 $(this).mouseleave(function() {
-                    $(this).find('.vsg-swatch-item-tooltip').fadeOut();
+                    $(this).find('.vsg-swatch-item-tooltip').fadeOut('fast');
                 })
             })
         },

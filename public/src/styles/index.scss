@@ -12,9 +12,12 @@ body.vsg-body {
 
 		// swatch
 		li.vsg-swatch-item {
+			margin: 5px 0;
 			margin-right: 10px;
 			position: relative;
-			padding: 5px 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 			.vsg-swatch-item-wrapper {
 				box-shadow: 0 0 0 1px rgb(0 0 0 / 30%);
 				display: block;
@@ -133,7 +136,7 @@ body.vsg-body {
 				}
 				&.vsg-swatch-item-tooltip-top {
 					transform: translate(-50%, -100%);
-					top: -0px;
+					top: -5px;
 					&:before {
 						border-top-color: #000;
 						bottom: -10px;
@@ -141,7 +144,7 @@ body.vsg-body {
 				}
 				&.vsg-swatch-item-tooltip-bottom {
 					transform: translate(-50%, 100%);
-					bottom: -10px;
+					bottom: -5px;
 					&:before {
 						border-bottom-color: #000;
 						top: -10px;
@@ -290,6 +293,7 @@ body.vsg-body {
 			th,
 			td {
 				display: block;
+				text-align: left;
 				label,
 				span {
 					display: inline-block;

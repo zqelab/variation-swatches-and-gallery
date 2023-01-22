@@ -245,7 +245,7 @@ class Variation_Swatches_And_Gallery_Public {
 			$classes[] = 'vsg-show-stockcount';
 		}
 
-		if ( $this->plugin->get_option()->get_option( 'selected_variation_attribute_label', '' ) ) {
+		if ( $this->plugin->get_option()->get_option( 'selected_variation_attribute_label', 'on' ) ) {
 			$classes[] = 'vsg-selected-variation-attribute-show-label';
 		}
 
@@ -728,7 +728,7 @@ class Variation_Swatches_And_Gallery_Public {
 			$tooltip_args['html_data'] = $option;
 		}
 
-		return apply_filters( 'vsg_tooltip_args', $args, $tooltip_args, $option, $term_id );
+		return apply_filters( 'vsg_tooltip_args', $tooltip_args, $args, $option, $term_id );
 	}
 
 	/**
@@ -784,9 +784,9 @@ class Variation_Swatches_And_Gallery_Public {
 	public function color( $args, $term_id, $option ) {
 
 		$color           = sanitize_hex_color( get_term_meta( $term_id, 'pam_color', true ) );
-		$color           = apply_filters( 'variation_swatches_and_gallery_color', $args, $color, $term_id, $option );
+		$color           = apply_filters( 'variation_swatches_and_gallery_color', $color, $args, $term_id, $option );
 		$secondary_color = false;
-		$secondary_color = apply_filters( 'variation_swatches_and_gallery_secondary_color', $args, $secondary_color, $term_id, $option );
+		$secondary_color = apply_filters( 'variation_swatches_and_gallery_secondary_color', $secondary_color, $args, $term_id, $option );
 
 		if ( ! $secondary_color ) {
 			printf(

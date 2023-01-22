@@ -156,7 +156,7 @@ class Variation_Swatches_And_Gallery {
 		$this->loader->add_action( 'woocommerce_product_option_terms', $plugin_admin, 'woocommerce_product_option_terms_action', 10, 3 );
 		$this->loader->add_filter( 'zqe_manage_edit_taxonomy_columns', $plugin_admin, 'zqe_manage_edit_taxonomy_columns_filter', 10, 1 );
 		$this->loader->add_filter( 'zqe_manage_taxonomy_custom_column', $plugin_admin, 'zqe_manage_taxonomy_custom_column_filter', 10, 3 );
-
+		$this->loader->add_action( 'woocommerce_after_edit_attribute_fields', $plugin_admin, 'woocommerce_after_edit_attribute_fields_action' );
 		$this->loader->add_action( 'woocommerce_product_after_variable_attributes', $plugin_admin, 'woocommerce_product_after_variable_attributes_action', 10, 3 );
 		$this->loader->add_action( 'admin_footer', $plugin_admin, 'admin_footer_action' );
 		$this->loader->add_action( 'woocommerce_save_product_variation', $plugin_admin, 'woocommerce_save_product_variation_action', 10, 2 );

@@ -560,4 +560,15 @@ class Variation_Swatches_And_Gallery_Admin {
 			}
 		}
 	}
+
+	/**
+	 * Function for `woocommerce_after_edit_attribute_fields` action-hook.
+	 *
+	 * @return void
+	 */
+	public function woocommerce_after_edit_attribute_fields_action() {
+
+		// action...
+	}
+
 }
