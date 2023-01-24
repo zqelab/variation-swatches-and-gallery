@@ -13,59 +13,38 @@ Variation Swatches and Gallery for WooCommerce is ultimate solution for Color, I
 </p>
 
 ## Core Features
-* 4 Custom attributes types, Color, Image, Button and Radio.
-* Custom meta fields for attribute terms (for custom attribute type),
-* Different gallery for each variation.
-* Details settings page to customize design and functions.
-* 24/7 Quick support.
 
-📢 Auto Convert All Variation Select Dropdowns to Image Swatch or Button Swatch or Combined of Button and Image by Default
-📢 Convert Globally Created Attribute Variations Into Color, Image, Radio and Button Swatches
-📢 Convert Manually Created Attribute Variations Into Image and Button Swatches
-📢 Variation Swatches Shape - Square, rounded and circle.
-📢 Cross / Blur / Hide For Out of Stock Variation Swatches (Up To 30 Variations)
-📢 Product Page Swatches Size Control
-📢 Show Selected Variation Name Beside Label
-📢 Swatches Tooltip Settings
-📢 Convert Buttons Swatches to Dropdown (If It’s needed)
-📢 Reorder Product Attribute Variation Swatches
-📢 Work on Variable Product Quick View Popup
-📢 Compatible with popular WooCommerce Themes
-📢 Frequently Updated And Secured Codebase
-📢 Option to disable default plugin stylesheet for theme developer
-📢 Compatible With Popular WooCommerce Plugins
+✔️ 4 Custom attributes types, Color, Image, Button and Radio.
+✔️ Custom meta fields for attribute terms (for custom attribute type),
+✔️ Different gallery for each variation.
+✔️ Details settings page to customize design and functions.
+✔️ 24/7 Quick support.
+
+✔️ Button Swatch as Default.
+✔️ Image Swatch as Default.
+✔️ Show Selected Variation Attribute Label with Label Separator .
+✔️ Disabled Swatch on Stockout.
+✔️ Clickable Disabled Variation (Stockout Variation).
+✔️ Clear Selected Variation on Click.
+✔️ Enable Tooltip with Position Top / Bottom.
+✔️ Show Variation Stock.
+✔️ Custom Ajax Variation Threshold.
+✔️ Three Selectable Swatch Shape - Circle, Rounded and Squere.
+✔️ Two Selectable Swatch Display Style - Inline and Block.
+✔️ Customizeable Swatch Width and Height for Color and Image Swatch.
+✔️ Show / Hide Label for Color and Image Swatch.
+✔️ Gallery Image for Each Variation.
 
 ## Premium Features
-📢 Multi Color Variation Swatches
-📢 Show Entire Color, Image, Label And Radio Attributes Swatches In Catelog / Category / Archive / Store/ Shop Pages
-📢 Show Selected Single Color or Image Or Label Attribute Swatches In Catelog / Category / Archive / Store / Shop Pages
-📢 Product Basis Attribute Swatches Type Change
-📢 Show All Color, Image & Button Swatches Type In the Same Attribute
-📢 Insert New Image Replacing Globally Added Image For Image Variation Swatches In Each Product
-📢 Insert New Color Replacing Globally Added Color In Color Variation Swatches For Each Product
-📢 Convert Manually Created Attribute Variations Into Color, Image, and Label Swatches
-📢 Change Variation Product Gallery After Selecting Single Attribute
-📢 Generate Selected Attribute Variation Link
-📢 Option to Select ROUNDED and SQUARED Attribute Variation Swatches Shape In the Same Product.
-📢 Show Cross Sign For Out of Stock Variation Swatches (Unlimited Variations Without hiding out of stock item from catalog)
-📢 Blur Out of Stock Variation Swatches (Unlimited Variations Without hiding out of stock item from catalog)
-📢 Hide Out of Stock Variation Swatches (Unlimited Variations Without hiding out of stock item from catalog)
-📢 Shop Page Swatches Size Control
-📢 Make Selected Attribute Variation Swatches Size Larger Than Other Default Attribute Variations
-📢 Keep Attribute Variation Selected on Product Page After Choosing from Catalog page.
-📢 Swatches Border Styling including Hover Swatches and Active Swatches
-📢 Show Variation Product Stock Notice
-📢 Enable / Disable Ajax Variation
-📢 Archive page swatches positioning
-📢 Archive page swatches alignment
-📢 Customize Tooltip Text and Background Color
-📢 Tooltip display setting on archive/shop page
-📢 Show Custom Text in Variation Tooltip
-📢 Show Custom Image in Variation Tooltip
-📢 Customize Tooltip Text and Background Color
-📢 Customize swatches colors, background and border sizes
-📢 Automatic updates
-📢 Exclusive technical support
+
+✔️ Premium Package is an Extention of Main Plugin, It Extends Main Plugin with Aditional Features.
+✔️ Enable Tooltip with Position Top / Bottom for Product Attribute Term.
+✔️ Image of Text Tool Tooltip Product Attribute Term.
+
+✔️ Enable Swatches for Archive / Shop.
+✔️ Customizeable Swatch Settings for Each Single Product.
+✔️ Swatch Styling ( Normal / Hover / Selected ) to Match Theme Color.
+✔️ Tooltip Styling to Match Theme Color.
 
 ## Contribute
 
