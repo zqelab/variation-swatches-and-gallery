@@ -97,6 +97,8 @@ class Variation_Swatches_And_Gallery {
 
 		$this->load_dependencies();
 		$this->set_locale();
+		$this->define_requirement_hooks();
+		$this->define_widget_hooks();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 	}
@@ -133,6 +135,32 @@ class Variation_Swatches_And_Gallery {
 		$plugin_i18n = new \Zqe\Variation_Swatches_And_Gallery_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+	}
+
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_requirement_hooks() {
+		$plugin_requirement = new \Zqe\Variation_Swatches_And_Gallery_Requirement( $this );
+		$this->loader->add_action( 'admin_notices', $plugin_requirement, 'php_requirement_notice' );
+		$this->loader->add_action( 'admin_notices', $plugin_requirement, 'wc_requirement_notice' );
+		$this->loader->add_action( 'admin_notices', $plugin_requirement, 'wc_version_requirement_notice' );
+	}
+
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_widget_hooks() {
+		$plugin_widget = new \Zqe\Variation_Swatches_And_Gallery_Widget( $this );
+		$this->loader->add_action( 'wp_dashboard_setup', $plugin_widget, 'dashboard_add_widgets' );
 	}
 
 	/**
