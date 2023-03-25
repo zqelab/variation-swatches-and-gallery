@@ -154,28 +154,34 @@
         });
     };
 })(jQuery, window, document);
+
 (function($) {
     $(document).on('wc_variation_form.vs', '.variations_form:not(.vsg-loaded)', function(event) {
         $(this).VSG();
     });
 
-    function vsg_update_flexslider(variation_gallery_images) {
+    function vsg_update_flexslider(images) {
         var vsg_flexslider = $('.woocommerce-product-gallery').data('flexslider')
         if (vsg_flexslider){
             var slides = vsg_flexslider.slides
             for (let j = 0; j < slides.length; j++) {
                 vsg_flexslider.removeSlide(slides[j])
             }
-            for (let k = 0; k < variation_gallery_images.length; k++) {
-                const nelement = variation_gallery_images[k];
-                vsg_flexslider.addSlide(nelement, 0);
+            for (var key in images) {
+                if (images.hasOwnProperty(key)) {
+                    const nelement = images[key];
+                    vsg_flexslider.addSlide(nelement, 0);
+                }
             }
         }
     }
+
     $('.variations_form:not(.vsg-loaded)').on('found_variation.vsg', function(e, variation) {
+        console.log("found_variation")
         var variation_gallery_images = variation.variation_gallery_images
         vsg_update_flexslider(variation_gallery_images)
     })
+
     $('.variations_form:not(.vsg-loaded)').on('reset_data.vsg', function(e) {
         var gallery_images = _VSG.gallery_images
         vsg_update_flexslider(gallery_images)
