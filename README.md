@@ -6,11 +6,14 @@
 <img alt="MIT License" src="https://img.shields.io/github/license/zqelab/variation-swatches-and-gallery?color=%23525ddc&style=flat-square"  />
 </p>
 
-<h1  align="center"><strong>Variation Swatches and Gallery for WooCommerce</strong></h1>
+<h1  align="center"><strong>Display Product Variations Beautifully with Variation Swatches and Gallery</strong></h1>
 
 <p  align="center">
 Variation Swatches and Gallery for WooCommerce is ultimate solution for Color, Image, Button and Radio Swatches For WooCommerce Variable Product Attributes, It also support gallery for each variation with unlimited images. 
+
+Variation Swatches and Gallery is a powerful tool for woocommerce store owners who want to improve the display of their products and enhance their customers' shopping experience. By allowing users to view variations with images or videos and swatches, customers can easily select the options they want, leading to more sales and happier customers. The plugin is easy to set up and configure, without requiring any coding knowledge, and is fully compatible with WooCommerce and other popular e-commerce plugins.
 </p>
+
 
 ## Core Features
 
@@ -18,6 +21,10 @@ Variation Swatches and Gallery for WooCommerce is ultimate solution for Color, I
 ✔️ Custom meta fields for attribute terms (for custom attribute type),
 ✔️ Different gallery for each variation.
 ✔️ Details settings page to customize design and functions.
+✔️ Easy setup and configuration, with no coding required
+✔️ Mobile-friendly and responsive design
+✔️ Fully compatible with WooCommerce
+✔️ Boost your sales by improving your customer's shopping experience
 ✔️ 24/7 Quick support.
 
 ✔️ Button Swatch as Default.
