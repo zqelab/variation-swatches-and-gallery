@@ -142,6 +142,20 @@ class Variation_Swatches_And_Gallery_Option {
 						'title'    => 'General',
 						'sections' => array(
 							array(
+								'id'     => 'general',
+								'title'  => 'General options',
+								'desc'   => 'General options',
+								'fields' => array(
+									array(
+										'id'      => 'enable_stylesheet',
+										'title'   => __( 'Enable Stylesheet.', 'variation-swatches-and-gallery' ),
+										'desc'    => __( 'Enable Stylesheet', 'variation-swatches-and-gallery' ),
+										'type'    => 'checkbox',
+										'default' => 'on',
+									),
+								),
+							),
+							array(
 								'id'     => 'button',
 								'title'  => 'Button Swatch',
 								'desc'   => 'Button visual styles',
@@ -188,7 +202,7 @@ class Variation_Swatches_And_Gallery_Option {
 									array(
 										'id'      => 'image_swatch_thumbnail_size',
 										'title'   => __( 'Image Swatch Size ', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'thumbnail',
 										'options' => $this->get_all_image_sizes(),
 									),
@@ -202,7 +216,7 @@ class Variation_Swatches_And_Gallery_Option {
 					'vsg_option_single_group',
 					array(
 						'id'       => 'single',
-						'title'    => 'Single / Product',
+						'title'    => 'Single / Product Page',
 						'group'    => 'single_group',
 						'sections' => array(
 							array(
@@ -213,7 +227,7 @@ class Variation_Swatches_And_Gallery_Option {
 
 									array(
 										'id'      => 'selected_variation_attribute_label',
-										'title'   => __( 'Show Selected Variation Attribute Label', 'variation-swatches-and-gallery' ),
+										'title'   => __( 'Show Selected Attribute', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Show selected variation label beside the attribute label.', 'variation-swatches-and-gallery' ),
 										'type'    => 'checkbox',
 										'default' => 'on',
@@ -226,11 +240,18 @@ class Variation_Swatches_And_Gallery_Option {
 										'default' => ':',
 										'last_field' => true,
 									),
+								),
+							),
+							array(
+								'id'     => 'advance',
+								'title'  => 'Product Single Page - Visual Section',
+								'desc'   => 'Advanced change some visual styles',
+								'fields' => array(
 									array(
 										'id'      => 'disabled_variation_behavior',
 										'title'   => __( 'Disabled Swatch Behavior', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Disabled attribute will be hide / blur.', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'blur-cross',
 										'options' => array(
 											'blur-cross' => __( 'Blur with cross', 'variation-swatches-and-gallery' ),
@@ -265,7 +286,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'tooltip_placement',
 										'title'   => __( 'Tooltip Placement', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Tooltip placement position. Applicable for image and color', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'top',
 										'options' => array(
 											'top'    => 'Top',
@@ -274,20 +295,19 @@ class Variation_Swatches_And_Gallery_Option {
 										'last_field' => true,
 									),
 									array(
-										'id'      => 'stockcount',
-										'title'   => __( 'Show Variation Stock', 'variation-swatches-and-gallery' ),
-										'desc'    => __( 'Show each variation stock and update according selected combination', 'variation-swatches-and-gallery' ),
-										'type'    => 'checkbox',
-										'default' => '',
-									),
-									array(
 										'id'      => 'threshold',
 										'title'   => __( 'Ajax Variation Threshold', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Control the number of enable ajax variation threshold', 'variation-swatches-and-gallery' ),
 										'type'    => 'number',
 										'default' => '30',
 									),
-
+									array(
+										'id'      => 'stockcount',
+										'title'   => __( 'Show Variation Stock', 'variation-swatches-and-gallery' ),
+										'desc'    => __( 'Show each variation stock and update according selected combination', 'variation-swatches-and-gallery' ),
+										'type'    => 'checkbox',
+										'default' => '',
+									),
 								),
 							),
 							array(
@@ -299,7 +319,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'button_swatch_style',
 										'title'   => __( 'Button Shape', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute shape for button.', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'rounded',
 										'options' => array(
 											'circle'  => 'Circle Shape',
@@ -311,7 +331,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'button_swatch_display',
 										'title'   => __( 'Button Display Style', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute display style for button', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'inline',
 										'options' => array(
 											'inline' => 'Inline',
@@ -347,7 +367,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'image_swatch_style',
 										'title'   => __( 'Image Shape', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute shape.', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'rounded',
 										'options' => array(
 											'circle'  => 'Circle Shape',
@@ -359,7 +379,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'image_swatch_display',
 										'title'   => __( 'Image Display Style', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute display style for image', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'inline',
 										'options' => array(
 											'inline' => 'Inline',
@@ -402,7 +422,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'color_swatch_style',
 										'title'   => __( 'Color Shape', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute shape.', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'rounded',
 										'options' => array(
 											'circle'  => 'Circle Shape',
@@ -414,7 +434,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'color_swatch_display',
 										'title'   => __( 'Color Display Style', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute display style for color', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'inline',
 										'options' => array(
 											'inline' => 'Inline',
@@ -439,7 +459,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'radio_swatch_style',
 										'title'   => __( 'Radio Shape', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute shape.', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'rounded',
 										'options' => array(
 											'circle'  => 'Circle Shape',
@@ -451,7 +471,7 @@ class Variation_Swatches_And_Gallery_Option {
 										'id'      => 'radio_swatch_display',
 										'title'   => __( 'Radio Display Style', 'variation-swatches-and-gallery' ),
 										'desc'    => __( 'Attribute display style for radio', 'variation-swatches-and-gallery' ),
-										'type'    => 'select',
+										'type'    => 'radio',
 										'default' => 'inline',
 										'options' => array(
 											'inline' => 'Inline',
