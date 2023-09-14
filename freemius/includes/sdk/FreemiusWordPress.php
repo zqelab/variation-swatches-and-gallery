@@ -348,14 +348,17 @@
          * @param string $pUrl
          * @param array  $pWPRemoteArgs
          *
-         * @return mixed
+         * @return array|WP_Error The response array or a WP_Error on failure.
          */
         static function RemoteRequest( $pUrl, $pWPRemoteArgs ) {
             $response = wp_remote_request( $pUrl, $pWPRemoteArgs );
 
             if (
-                empty( $response['headers'] ) ||
-                empty( $response['headers']['x-api-server'] )
+                is_array( $response ) &&
+                (
+                    empty( $response['headers'] ) ||
+                    empty( $response['headers']['x-api-server'] )
+                )
             ) {
                 // API is considered blocked if the response doesn't include the `x-api-server` header. When there's no error but this header doesn't exist, the response is usually not in the expected form (e.g., cannot be JSON-decoded).
                 $response = new WP_Error( 'api_blocked', htmlentities( $response['body'] ) );
@@ -470,8 +473,12 @@
 						 */
 						if ( filter_var( $matches[1], FILTER_VALIDATE_IP ) ) {
 							if ( strlen( inet_pton( $matches[1] ) ) === 16 ) {
-//						    error_log('Invalid IPv6 configuration on server, Please disable or get native IPv6 on your server.');
-								// Hook to an action triggered just before cURL is executed to resolve the IP version to v4.
+								/**
+								 * error_log('Invalid IPv6 configuration on server, Please disable or get native IPv6 on your server.');
+								 * Hook to an action triggered just before cURL is executed to resolve the IP version to v4.
+								 * 
+								 * @phpstan-ignore-next-line
+								 */
 								add_action( 'http_api_curl', 'Freemius_Api_WordPress::CurlResolveToIPv4', 10, 1 );
 
 								// Re-run request.
