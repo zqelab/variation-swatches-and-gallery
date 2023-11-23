@@ -590,6 +590,11 @@ class Variation_Swatches_And_Gallery_Public {
 		$name                      = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
 		$managing_stock            = $product->managing_stock();
 		$stockcount                = $this->plugin->get_option()->get_option( 'stockcount', 'on' );
+		
+		if(isset($args['is_archive']) && $args['is_archive']) {
+			$stockcount                = $this->plugin->get_option()->get_option( 'archive_stockcount', '' );
+		}
+
 		$is_in_stock_any_variation = false;
 		$is_in_stock               = false;
 		$variation_stock_count     = 0;
@@ -736,10 +741,15 @@ class Variation_Swatches_And_Gallery_Public {
 
 		$tooltip_args['placement'] = $this->plugin->get_option()->get_option( 'tooltip_placement', 'top' );
 
+		if(isset($args['is_archive']) && $args['is_archive']) {
+			$tooltip = $this->plugin->get_option()->get_option( 'archive_tooltip', 'on' );
+			$tooltip_args['placement'] = $this->plugin->get_option()->get_option( 'archive_tooltip_placement', 'top' );
+		}
+
 		if ( $tooltip ) {
 			$tooltip_args['type']      = 'text';
 			$tooltip_args['html_data'] = $option;
-		}
+		} 
 
 		return apply_filters( 'vsg_tooltip_args', $tooltip_args, $args, $option, $term_id );
 	}

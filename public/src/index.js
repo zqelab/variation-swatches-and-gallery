@@ -1,6 +1,13 @@
 (function($, window, document, undefined) {
     'use strict';
 
+    /**
+     * VSG (Variation Swatch Generator) constructor function.
+     * Initializes the variation swatches for WooCommerce products.
+     * 
+     * @param {HTMLElement} element - The DOM element that will be enhanced by VSG.
+     * @param {Object} options - Configuration options for VSG.
+     */
     function VSG(element, options) {
         this.element = element;
         this.settings = $.extend({}, {}, options);
@@ -13,25 +20,50 @@
         this.update();
         this.tooltip();
     }
+
+    // Extend the VSG prototype with methods.
     $.extend(VSG.prototype, {
+        /**
+         * Initializes the swatch items and attaches event handlers.
+         */
         init: function() {
+            // Iterate over each 'ul.vsg-swatch-items-wrapper' element found within the main element.
             this.$element.find('ul.vsg-swatch-items-wrapper').each(function(i, el) {
+                // Find and store the sibling select element with class 'vsg-raw-select'.
                 let select = $(this).siblings('select.vsg-raw-select');
+
+                // Attach an event listener for the 'click' event on 'li.vsg-swatch-item' elements.
                 $(this).on('click.vs', 'li.vsg-swatch-item', function(e) {
+                    // Prevent the default action and stop the event from propagating up the DOM tree.
                     e.preventDefault();
                     e.stopPropagation();
+
+                    // Get the value associated with the clicked swatch item.
                     let value = $(this).data('value');
+
+                    // Check if the option to clear the selection on reselect is enabled 
+                    // and if the current value of the select box matches the swatch value.
                     if (_VSG.option.single.clear_on_reselect && select.val() && select.val() === value) {
+                        // Clear the select box value.
                         select.val('');
                     } else {
+                        // Set the select box to the value of the clicked swatch.
                         select.val(value);
                     }
+
+                    // Trigger change, click, and focusin events on the select box.
+                    // This ensures that any other attached event handlers or UI updates are executed.
                     select.trigger('change');
                     select.trigger('click');
                     select.trigger('focusin');
                 });
-            })
+            });
         },
+
+
+        /**
+         * Updates the swatch UI in response to changes in variations.
+         */
         update: function() {
             var plugin = this
             this.$element.on('woocommerce_variation_has_changed.vs', function(event) {
@@ -40,6 +72,10 @@
                 plugin.selectedAttribute();
             })
         },
+
+        /**
+         * Sets up swatches based on available product variations.
+         */
         swatchSetup: function() {
             this.$element.find('ul.vsg-swatch-items-wrapper').each(function(i, el) {
                 var select = $(this).siblings('select.vsg-raw-select');
@@ -71,6 +107,10 @@
                 })
             })
         },
+
+        /**
+         * Updates the stock count display for each swatch item.
+         */
         stockCount: function() {
             var plugin = this
             var selected_attribute = this.$element.find('ul.vsg-swatch-items-wrapper').find('li.vsg-swatch-item-selected')
@@ -109,6 +149,10 @@
                 }
             })
         },
+
+        /**
+         * Updates the display of selected attributes.
+         */
         selectedAttribute: function() {
             if (!_VSG.option.single.selected_variation_attribute_label) {
                 return false
@@ -126,6 +170,10 @@
                 }
             })
         },
+
+        /**
+         * Initializes tooltips for swatch items.
+         */
         tooltip: function() {
             this.$element.find('li.vsg-swatch-item').each(function(index, el) {
                 $(this).mouseover(function() {
@@ -136,6 +184,12 @@
                 })
             })
         },
+
+        /**
+         * Checks for empty keys in the product attributes.
+         * @param {Object} attributes - Product attributes.
+         * @returns {Array} Array of empty keys.
+         */
         checkemptykey: function(attributes) {
             var empty = []
             for (const [key, value] of Object.entries(attributes)) {
@@ -146,6 +200,13 @@
             return empty;
         },
     });
+
+    /**
+     * jQuery plugin wrapper for VSG.
+     * Ensures that each element is only initialized once.
+     * 
+     * @param {Object} options - Configuration options for VSG.
+     */
     $.fn['VSG'] = function(options) {
         return this.each(function() {
             if (!$.data(this, 'VSG')) {
@@ -153,20 +214,36 @@
             }
         });
     };
+
 })(jQuery, window, document);
 
-(function($) {
+(function($, window, document, undefined) {
+    'use strict';
+
+    // Listen for the 'wc_variation_form' event on the document.
+    // This event is triggered when a WooCommerce variation form is initialized.
     $(document).on('wc_variation_form.vs', '.variations_form:not(.vsg-loaded)', function(event) {
+        // Initialize the VSG (Variation Swatch Generator) for the form.
         $(this).VSG();
     });
 
+    // Function to update the FlexSlider with new images.
+    // This function takes an array or object of images as input.
     function vsg_update_flexslider(images) {
-        var vsg_flexslider = $('.woocommerce-product-gallery').data('flexslider')
-        if (vsg_flexslider){
-            var slides = vsg_flexslider.slides
+        // Fetch the FlexSlider instance attached to the WooCommerce product gallery.
+        var vsg_flexslider = $('.woocommerce-product-gallery').data('flexslider');
+
+        // Check if the FlexSlider instance exists.
+        if (vsg_flexslider) {
+            // Get the current slides in the FlexSlider.
+            var slides = vsg_flexslider.slides;
+
+            // Loop through and remove all existing slides from the FlexSlider.
             for (let j = 0; j < slides.length; j++) {
-                vsg_flexslider.removeSlide(slides[j])
+                vsg_flexslider.removeSlide(slides[j]);
             }
+
+            // Loop through the images and add each as a new slide to the FlexSlider.
             for (var key in images) {
                 if (images.hasOwnProperty(key)) {
                     const nelement = images[key];
@@ -176,14 +253,26 @@
         }
     }
 
+    // Listen for the 'found_variation' event on variation forms not yet loaded with VSG.
+    // This event is triggered when a product variation is selected.
     $('.variations_form:not(.vsg-loaded)').on('found_variation.vsg', function(e, variation) {
-        console.log("found_variation")
-        var variation_gallery_images = variation.variation_gallery_images
-        vsg_update_flexslider(variation_gallery_images)
-    })
+        console.log("found_variation");
 
-    $('.variations_form:not(.vsg-loaded)').on('reset_data.vsg', function(e) {
-        var gallery_images = _VSG.gallery_images
-        vsg_update_flexslider(gallery_images)
+        // Fetch the gallery images specific to the selected variation.
+        var variation_gallery_images = variation.variation_gallery_images;
+
+        // Update the FlexSlider with the variation-specific images.
+        vsg_update_flexslider(variation_gallery_images);
     });
-})(jQuery);
+
+    // Listen for the 'reset_data' event on variation forms not yet loaded with VSG.
+    // This event is typically triggered when the variation form is reset to its default state.
+    $('.variations_form:not(.vsg-loaded)').on('reset_data.vsg', function(e) {
+        // Fetch the default gallery images stored in the _VSG object.
+        var gallery_images = _VSG.gallery_images;
+
+        // Update the FlexSlider with the default gallery images.
+        vsg_update_flexslider(gallery_images);
+    });
+
+})(jQuery, window, document);
