@@ -39,7 +39,7 @@
 
                 // Attach a click event listener to each 'li.vsg-swatch-item' within the swatch wrapper.
                 // These are the individual swatch options that users can click.
-                $(this).on('click.vs', 'li.vsg-swatch-item', function(e) {
+                $(this).on('click.vsg', 'li.vsg-swatch-item', function(e) {
                     // Prevent the default action (e.g., navigating to a link) and stop event propagation
                     // to ensure that the click event does not affect other elements.
                     e.preventDefault();
@@ -72,7 +72,7 @@
  
         /**
          * Updates the swatch UI in response to changes in product variations.
-         * This method is designed to be a response handler for the 'woocommerce_variation_has_changed.vs' event.
+         * This method is designed to be a response handler for the 'woocommerce_variation_has_changed.vsg' event.
          * It ensures that the swatch UI elements reflect the current state of product variations.
          * 
          * When a product variation changes (e.g., a different size or color is selected by the user),
@@ -87,9 +87,9 @@
             var plugin = this;
 
             // Attach an event listener to the main element.
-            // This listener responds to a custom event ('woocommerce_variation_has_changed.vs'),
+            // This listener responds to a custom event ('woocommerce_variation_has_changed.vsg'),
             // which is triggered when there's a change in the product variation.
-            this.$element.on('woocommerce_variation_has_changed.vs', function(event) {
+            this.$element.on('woocommerce_variation_has_changed.vsg', function(event) {
                 // Call the `swatchSetup` method to update the swatches display.
                 plugin.swatchSetup();
 
@@ -314,7 +314,7 @@
 
     // Listen for the 'wc_variation_form' event on the document.
     // This event is triggered when a WooCommerce variation form is initialized.
-    $(document).on('wc_variation_form.vs', '.variations_form:not(.vsg-loaded)', function(event) {
+    $(document).on('wc_variation_form.vsg', '.variations_form:not(.vsg-loaded)', function(event) {
         // Initialize the VSG (Variation Swatch Generator) for the form.
         $(this).VSG();
     });
