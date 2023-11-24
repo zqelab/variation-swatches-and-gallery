@@ -1025,4 +1025,55 @@ class Variation_Swatches_And_Gallery_Public {
 		global $wp;
 		return esc_url( trailingslashit( home_url( add_query_arg( $args, $wp->request ) ) ) );
 	}
+
+
+	/**
+	 * Modifies the product gallery image IDs for WooCommerce products.
+	 * This function adds the main product gallery images, variation main images,
+	 * and additional variation gallery images (from a specific meta key) to the product gallery.
+	 * 
+	 * @param array $image_ids The original array of image IDs for the product gallery.
+	 * @param WC_Product $product The product object.
+	 * @return array The modified array of image IDs including main product images,
+	 *               variation images, and additional variation gallery images.
+	 */
+	public function custom_gallery_image_ids( $image_ids, $product ) {
+		// Start with the existing gallery image IDs
+		$gallery_image_ids = $image_ids;
+
+		// Check if the product is a variable product
+		if ( $product->is_type( 'variable' ) ) {
+			// Retrieve all variations of the product
+			$variations = $product->get_available_variations();
+
+			// Iterate through each variation
+			foreach ( $variations as $variation ) {
+				// Get the ID of the current variation
+				$variation_id = $variation['variation_id'];
+
+				// Retrieve the main image ID of the variation
+				$variation_image_id = get_post_thumbnail_id( $variation_id );
+
+				// Add the variation main image to the gallery, if it's not already included
+				if ( $variation_image_id && ! in_array( $variation_image_id, $gallery_image_ids ) ) {
+					$gallery_image_ids[] = $variation_image_id;
+				}
+
+				// Get additional gallery images defined in the specific meta key
+				$additional_image_ids = get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids' );
+
+				// If additional images are found, merge them into the main gallery array
+				if ( ! empty( $additional_image_ids ) ) {
+					$gallery_image_ids = array_merge( $gallery_image_ids, $additional_image_ids );
+				}
+			}
+		}
+
+		// Remove any duplicate image IDs to prevent redundant images in the gallery
+		$gallery_image_ids = array_unique( $gallery_image_ids );
+
+		// Return the modified array of image IDs
+		return $gallery_image_ids;
+	}
+
 }

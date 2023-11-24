@@ -208,6 +208,7 @@ class Variation_Swatches_And_Gallery {
 		$this->loader->add_filter( 'woocommerce_variation_is_active', $plugin_public, 'woocommerce_variation_is_active_filter', 10, 2 );
 		$this->loader->add_filter( 'woocommerce_available_variation', $plugin_public, 'woocommerce_available_variation_filter', 10, 3 );
 		$this->loader->add_filter( 'woocommerce_ajax_variation_threshold', $plugin_public, 'woocommerce_ajax_variation_threshold_filter' );
+		$this->loader->add_filter( 'woocommerce_product_get_gallery_image_ids', $plugin_public, 'custom_gallery_image_ids', 10, 2 );
 	}
 
 	/**
