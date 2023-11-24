@@ -19,6 +19,7 @@
         this.init();
         this.update();
         this.tooltip();
+        console.log(this.product_variations)
     }
 
     // Extend the VSG prototype with methods.
