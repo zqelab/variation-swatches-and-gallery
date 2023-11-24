@@ -244,19 +244,45 @@ class Variation_Swatches_And_Gallery_Public {
 		$classes[] = ( wp_is_mobile() ? 'vsg-mobile' : '' );
 
 		$disabled_variation_behavior = $this->plugin->get_option()->get_option( 'disabled_variation_behavior', 'blur' );
-		$classes[]                   = sprintf( 'vsg-disabled-variation-attribute-%s', $disabled_variation_behavior );
+		$archive_disabled_variation_behavior = $this->plugin->get_option()->get_option( 'archive_disabled_variation_behavior', 'blur' );
 
-		if ( $this->plugin->get_option()->get_option( 'clickable_disabled_variation_attribute', '' ) ) {
-			$classes[] = 'vsg-disabled-variation-attribute-clickable';
+		if(is_single()){
+			$classes[]                   = sprintf( 'vsg-disabled-variation-attribute-%s', $disabled_variation_behavior );
+		} else {
+			$classes[]                   = sprintf( 'vsg-disabled-variation-attribute-%s', $archive_disabled_variation_behavior );
 		}
 
-		if ( $this->plugin->get_option()->get_option( 'tooltip', 'on' ) ) {
-			$classes[] = 'vsg-show-tooltip';
+		if(is_single()){
+			if ( $this->plugin->get_option()->get_option( 'clickable_disabled_variation_attribute', '' ) ) {
+				$classes[] = 'vsg-disabled-variation-attribute-clickable';
+			}
+		} else {
+			if ( $this->plugin->get_option()->get_option( 'archive_clickable_disabled_variation_attribute', '' ) ) {
+				$classes[] = 'vsg-disabled-variation-attribute-clickable';
+			}
 		}
 
-		if ( $this->plugin->get_option()->get_option( 'stockcount', 'on' ) ) {
-			$classes[] = 'vsg-show-stockcount';
+		if(is_single()){
+			if ( $this->plugin->get_option()->get_option( 'tooltip', 'on' ) ) {
+				$classes[] = 'vsg-show-tooltip';
+			}
+		} else {
+			if ( $this->plugin->get_option()->get_option( 'archive_tooltip', 'on' ) ) {
+				$classes[] = 'vsg-show-tooltip';
+			}
 		}
+
+		if(is_single()){
+			if ( $this->plugin->get_option()->get_option( 'stockcount', 'on' ) ) {
+				$classes[] = 'vsg-show-stockcount';
+			}
+		} else {
+			if ( $this->plugin->get_option()->get_option( 'archive_stockcount', 'on' ) ) {
+				$classes[] = 'vsg-show-stockcount';
+			}
+		}
+
+
 
 		if ( $this->plugin->get_option()->get_option( 'selected_variation_attribute_label', 'on' ) ) {
 			$classes[] = 'vsg-selected-variation-attribute-show-label';
@@ -713,7 +739,7 @@ class Variation_Swatches_And_Gallery_Public {
 	 * @access    public
 	 */
 	public function tooltip_html( $tooltip_args ) {
-		if ( is_array( $tooltip_args ) && ! empty( $tooltip_args ) && isset( $tooltip_args['type'] ) && ! empty( $tooltip_args['type'] ) ) {
+		if ( is_array( $tooltip_args ) && ! empty( $tooltip_args ) && isset( $tooltip_args['type'] ) && $tooltip_args['type'] !== 'no' && ! empty( $tooltip_args['type'] ) ) {
 			echo sprintf(
 				'<div style="display:none;" class="vsg-swatch-item-tooltip vsg-swatch-item-tooltip-%3$s vsg-swatch-item-tooltip-%1$s">%2$s</div>',
 				esc_attr( $tooltip_args['placement'] ),
