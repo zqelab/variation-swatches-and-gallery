@@ -1008,7 +1008,7 @@ class Variation_Swatches_And_Gallery_Public {
 	 * @access    public
 	 */
 	public function woocommerce_ajax_variation_threshold_filter() {
-		return 30;
+		return $this->plugin->get_option()->get_option( 'threshold', 30 );
 	}
 
 	/**

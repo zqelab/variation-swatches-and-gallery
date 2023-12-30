@@ -153,6 +153,13 @@ class Variation_Swatches_And_Gallery_Option {
 										'type'    => 'checkbox',
 										'default' => 'on',
 									),
+									array(
+										'id'      => 'threshold',
+										'title'   => __( 'Ajax Variation Threshold', 'variation-swatches-and-gallery' ),
+										'desc'    => __( 'Control the number of enable ajax variation threshold', 'variation-swatches-and-gallery' ),
+										'type'    => 'number',
+										'default' => '30',
+									),
 								),
 							),
 							array(
@@ -294,13 +301,7 @@ class Variation_Swatches_And_Gallery_Option {
 										),
 										'last_field' => true,
 									),
-									array(
-										'id'      => 'threshold',
-										'title'   => __( 'Ajax Variation Threshold', 'variation-swatches-and-gallery' ),
-										'desc'    => __( 'Control the number of enable ajax variation threshold', 'variation-swatches-and-gallery' ),
-										'type'    => 'number',
-										'default' => '30',
-									),
+
 									array(
 										'id'      => 'stockcount',
 										'title'   => __( 'Show Variation Stock', 'variation-swatches-and-gallery' ),
