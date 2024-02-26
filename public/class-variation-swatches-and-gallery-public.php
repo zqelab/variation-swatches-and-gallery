@@ -1073,7 +1073,34 @@ class Variation_Swatches_And_Gallery_Public {
 		$gallery_image_ids = array_unique( $gallery_image_ids );
 
 		// Return the modified array of image IDs
-		return $gallery_image_ids;
+		return $this->add_dynamic_gallery_images($gallery_image_ids);
 	}
 
+	/**
+	 * Filters the gallery image IDs for a WooCommerce product to ensure only valid attachment IDs are included.
+	 * Invalid or non-attachment IDs are removed from the array. This helps in cases where dynamic gallery images
+	 * might be added programmatically and need validation.
+	 *
+	 * @param array $ids An array of attachment IDs for the product's gallery images.
+	 * @param WC_Product $product The product object for which the gallery images are being filtered.
+	 * @return array Filtered array of attachment IDs, with non-attachments removed.
+	 */
+	public function add_dynamic_gallery_images($ids){
+		// Check if the input $ids is an array to prevent issues in foreach loop
+		if(!is_array($ids)){
+			error_log('Expected $ids to be an array, received ' . gettype($ids));
+			return array(); // Return an empty array if $ids is not an array
+		}
+		// Iterate through each ID in the array
+		foreach ($ids as $key => $attachment_id) {
+			// Safely get the post object for the attachment ID
+			$post = get_post($attachment_id);
+			
+			// If the get_post() function fails to retrieve the post or the post type is not 'attachment', remove the ID
+			if(!$post || $post->post_type != 'attachment'){
+				unset($ids[$key]);
+			}
+		}
+		return $ids;
+	}
 }
