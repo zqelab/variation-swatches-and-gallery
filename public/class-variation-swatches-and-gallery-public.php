@@ -930,7 +930,7 @@ class Variation_Swatches_And_Gallery_Public {
 	public function woocommerce_variation_is_active_filter( $active, $variation ) {
 
 		if ( ! $variation->is_in_stock() ) {
-			return false;
+			return true;
 		}
 
 		return $active;
