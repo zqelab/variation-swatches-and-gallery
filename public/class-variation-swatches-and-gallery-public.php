@@ -402,6 +402,9 @@ class Variation_Swatches_And_Gallery_Public {
 		if ( 'select' !== $args['attribute_type'] ) {
 			$style = 'display:none';
 			$class = ' vsg-raw-select';
+			//if ( defined( 'WVSG_DEBUG' ) && true === \WVSG_DEBUG ) {
+				$style = '';
+			//}
 		}
 
 		echo '<select id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '" style="' . esc_attr( $style ) . '">';

@@ -257,7 +257,14 @@ class Variation_Swatches_And_Gallery_Option {
 									array(
 										'id'      => 'disabled_variation_behavior',
 										'title'   => __( 'Disabled Swatch Behavior', 'variation-swatches-and-gallery' ),
-										'desc'    => __( 'Disabled attribute will be hide / blur.', 'variation-swatches-and-gallery' ),
+										'desc'    => __( 'Disabled attribute will be hide / blur.
+										
+										WooCommerce > Settings > Products > Inventory :: Manage stock: Enable stock management (Should be checked) 
+										WooCommerce > Settings > Products > Inventory :: Out of stock visibility:   Hide out of stock items from the catalog (Should be checked) 
+										
+										Product Edit Page -> Inventory > Stock management: Track stock quantity for this product  (Should be checked)
+										
+										', 'variation-swatches-and-gallery' ),
 										'type'    => 'radio',
 										'default' => 'blur-cross',
 										'options' => array(
@@ -269,7 +276,8 @@ class Variation_Swatches_And_Gallery_Option {
 									array(
 										'id'      => 'clickable_disabled_variation_attribute',
 										'title'   => __( 'Clickable Disabled Variation', 'variation-swatches-and-gallery' ),
-										'desc'    => __( 'Enable click disable variation label beside the attribute label. (not selectable)', 'variation-swatches-and-gallery' ),
+										'desc'    => __( 'Enable click disable variation label beside the attribute label. (not selectable) (if Disabled Swatch Behavior no hide)
+										  ', 'variation-swatches-and-gallery' ),
 										'type'    => 'checkbox',
 										'default' => '',
 									),
