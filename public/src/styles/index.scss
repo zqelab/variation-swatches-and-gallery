@@ -4,20 +4,22 @@ body.vsg-body {
 		margin: 0;
 		padding: 0;
 		list-style: none;
-		display: flex;
-		flex-wrap: wrap;
-		align-content: center;
-		justify-content: left;
-		align-items: center;
+		// display: flex;
+		// flex-wrap: wrap;
+		// align-content: center;
+		// justify-content: left;
+		// align-items: center;
 
 		// swatch
 		li.vsg-swatch-item {
 			margin: 5px 0;
 			margin-right: 10px;
 			position: relative;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
+			display: inline-block;
+			text-align: inherit;
+			// display: flex;
+			// flex-direction: column;
+			// align-items: center;
 			.vsg-swatch-item-wrapper {
 				box-shadow: 0 0 0 1px rgb(0 0 0 / 30%);
 				display: block;
