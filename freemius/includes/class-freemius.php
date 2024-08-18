@@ -425,6 +425,14 @@
 
             $this->_storage = FS_Storage::instance( $this->_module_type, $this->_slug );
 
+            // If not set or 24 hours have already passed from the last time it's set, set the last load timestamp to the current time.
+            if (
+                ! isset( $this->_storage->last_load_timestamp ) ||
+                $this->_storage->last_load_timestamp < ( time() - ( WP_FS__TIME_24_HOURS_IN_SEC ) )
+            ) {
+                $this->_storage->last_load_timestamp = time();
+            }
+
             $this->_cache = FS_Cache_Manager::get_manager( WP_FS___OPTION_PREFIX . "cache_{$module_id}" );
 
             $this->_logger = FS_Logger::get_logger( WP_FS__SLUG . '_' . $this->get_unique_affix(), WP_FS__DEBUG_SDK, WP_FS__ECHO_DEBUG_SDK );
@@ -1348,6 +1356,29 @@
             }
         }
 
+        function _run_garbage_collector() {
+            if ( true !== fs_get_optional_constant( 'WP_FS__ENABLE_GARBAGE_COLLECTOR', true ) ) {
+                return;
+            }
+
+            if ( ! $this->is_user_in_admin() ) {
+                return;
+            }
+
+            require_once WP_FS__DIR_INCLUDES . '/class-fs-lock.php';
+
+            $lock = new FS_Lock( 'garbage_collection' );
+
+            if ( $lock->is_locked() ) {
+                return;
+            }
+
+            // Create a 1-day lock.
+            $lock->lock( WP_FS__TIME_24_HOURS_IN_SEC );
+
+            FS_Garbage_Collector::instance()->clean();
+        }
+
         /**
          * Opens the support forum subemenu item in a new browser page.
          *
@@ -1442,6 +1473,8 @@
                         $this->_plugins_loaded();
                     }
                 }
+
+                add_action( 'plugins_loaded', array( &$this, '_run_garbage_collector' ) );
 
                 if ( ! self::is_ajax() ) {
                     if ( ! $this->is_addon() ) {
@@ -3089,11 +3122,8 @@
                 return false;
             }
 
-            $url_params = array();
-            parse_str( parse_url( $url, PHP_URL_QUERY ), $url_params );
-
-            $sub_url_params = array();
-            parse_str( parse_url( $sub_url, PHP_URL_QUERY ), $sub_url_params );
+            $url_params     = fs_parse_url_params( $url );
+            $sub_url_params = fs_parse_url_params( $sub_url );
 
             foreach ( $sub_url_params as $key => $val ) {
                 if ( ! isset( $url_params[ $key ] ) || $val != $url_params[ $key ] ) {
@@ -4144,12 +4174,16 @@
                 ! empty( $this->_storage->connectivity_test ) &&
                 isset( $this->_storage->connectivity_test['is_active'] )
             ) {
-                $is_active = $this->_storage->connectivity_test['is_active'];
+                $is_connected = isset( $this->_storage->connectivity_test['is_connected'] ) ?
+                    $this->_storage->connectivity_test['is_connected'] :
+                    null;
+                $is_active    = ( $this->_storage->connectivity_test['is_active'] || is_object( $this->_site ) );
             } else {
-                $is_active = $this->should_turn_fs_on( $this->apply_filters( 'is_plugin_update', $this->is_plugin_update() ) );
-
-                $this->store_connectivity_info( (object) array( 'is_active' => $is_active ), null );
+                $is_connected = null;
+                $is_active    = $this->should_turn_fs_on( $this->apply_filters( 'is_plugin_update', $this->is_plugin_update() ) );
             }
+
+            $this->store_connectivity_info( (object) array( 'is_active' => $is_active ), $is_connected );
 
             if ( $is_active ) {
                 $this->_is_on = true;
@@ -5454,7 +5488,12 @@
                 'affiliate_moderation' => $this->get_option( $plugin_info, 'has_affiliation' ),
                 'bundle_id'            => $this->get_option( $plugin_info, 'bundle_id', null ),
                 'bundle_public_key'    => $this->get_option( $plugin_info, 'bundle_public_key', null ),
-                'opt_in_moderation'    => $this->get_option( $plugin_info, 'opt_in', null ),
+                'opt_in_moderation'    => $this->get_option(
+                    $plugin_info,
+                    'opt_in',
+                    // For backward compatibility, we support both parameter names: opt_in and opt_in_moderation.
+                    $this->get_option( $plugin_info, 'opt_in_moderation', null )
+                ),
             ) );
 
             if ( $plugin->is_updated() ) {
@@ -7304,7 +7343,7 @@
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'json2' );
 
-            fs_enqueue_local_script( 'postmessage', 'nojquery.ba-postmessage.min.js' );
+            fs_enqueue_local_script( 'postmessage', 'nojquery.ba-postmessage.js' );
             fs_enqueue_local_script( 'fs-postmessage', 'postmessage.js' );
         }
 
@@ -13706,6 +13745,18 @@
             $license_key = trim( fs_request_get_raw( 'license_key' ) );
 
             if ( empty( $license_key ) ) {
+                $license_id = trim( fs_request_get_raw( 'license_id' ) );
+
+                if ( FS_Plugin_License::is_valid_id( $license_id ) ) {
+                    $license = $this->_get_license_by_id( $license_id, false );
+
+                    if ( is_object( $license ) ) {
+                        $license_key = $license->secret_key;
+                    }
+                }
+            }
+
+            if ( empty( $license_key ) ) {
                 exit;
             }
 
@@ -14109,15 +14160,21 @@
                     }
                 }
 
+                $is_connected = null;
+
                 if ( true !== $result && ! FS_Api::is_api_result_entity( $result ) ) {
                     if ( FS_Api::is_blocked( $result ) ) {
                         $result->error->message = $this->generate_api_blocked_notice_message_from_result( $result );
+
+                        $is_connected = false;
                     }
 
                     $error = FS_Api::is_api_error_object( $result ) ?
                         $result->error->message :
                         var_export( $result, true );
                 } else {
+                    $is_connected = true;
+
                     $fs->network_upgrade_mode_completed();
 
                     $fs->_user = $user;
@@ -14134,6 +14191,8 @@
                         $fs->get_parent_instance()->get_account_url() :
                         $fs->get_after_activation_url( 'after_connect_url' );
                 }
+
+                $fs->update_connectivity_info( $is_connected );
             } else {
                 $next_page = $fs->opt_in(
                     false,
@@ -14791,9 +14850,15 @@
             }
 
             if ( ! $this->is_registered() ) {
+                $email_address = isset( $affiliate['email'] ) ? $affiliate['email'] : '';
+
+                if ( ! is_email( $email_address ) ) {
+                    self::shoot_ajax_failure('Invalid email address.');
+                }
+
                 // Opt in but don't track usage.
                 $next_page = $this->opt_in(
-                    false,
+                    $email_address,
                     false,
                     false,
                     false,
@@ -20759,7 +20824,7 @@
          *
          * @return bool|FS_Plugin_Tag
          */
-        function get_update( $plugin_id = false, $flush = true, $expiration = WP_FS__TIME_24_HOURS_IN_SEC, $newer_than = false ) {
+        function get_update( $plugin_id = false, $flush = true, $expiration = FS_Plugin_Updater::UPDATES_CHECK_CACHE_EXPIRATION, $newer_than = false ) {
             $this->_logger->entrance();
 
             if ( ! is_numeric( $plugin_id ) ) {
@@ -21291,7 +21356,9 @@
                 /**
                  * Sync licenses. Pass the site's license ID so that the foreign licenses will be fetched if the license
                  * associated with that ID is not included in the user's licenses collection.
+                 * Save previous value to manage remote license renewals.
                  */
+                $was_license_expired_before_sync = is_object( $this->_license ) && $this->_license->is_expired();
                 $this->_sync_licenses(
                     $site->license_id,
                     ( $is_context_single_site ?
@@ -21425,6 +21492,14 @@
                                     $plan_change = 'expired';
                                 }
                             }
+                        } else if ( $was_license_expired_before_sync ) {
+                            /**
+                             * If license was expired but it is not anymore.
+                             *
+                             *
+                             * @author Daniele Alessandra (@danielealessandra)
+                             */
+                            $plan_change = 'extended';
                         }
                     }
 
@@ -21499,6 +21574,12 @@
                             'trial_promotion',
                             'trial_expired',
                             'activation_complete',
+                            'license_expired',
+                        ) );
+                        break;
+                    case 'extended':
+                        $this->_admin_notices->remove_sticky( array(
+                            'trial_expired',
                             'license_expired',
                         ) );
                         break;
@@ -22412,7 +22493,7 @@
             $background = false,
             $plugin_id = false,
             $flush = true,
-            $expiration = WP_FS__TIME_24_HOURS_IN_SEC,
+            $expiration = FS_Plugin_Updater::UPDATES_CHECK_CACHE_EXPIRATION,
             $newer_than = false
         ) {
             $this->_logger->entrance();
@@ -24054,7 +24135,7 @@
 
             if ( $this->is_registered() ) {
                 // If opted-in, override trial with up to date data from API.
-                $trial_plans       = FS_Plan_Manager::instance()->get_trial_plans( $this->_plans );
+                $trial_plans       = FS_Plan_Manager::instance()->get_visible_trial_plans( $this->_plans );
                 $trial_plans_count = count( $trial_plans );
 
                 if ( 0 === $trial_plans_count ) {
@@ -25424,6 +25505,12 @@
                 return false;
             }
 
+            $tabs_html = $this->get_tabs_html();
+
+            if ( empty( $tabs_html ) ) {
+                return false;
+            }
+
             /**
              * Enqueue the original stylesheets that are included in the
              * theme settings page. That way, if the theme settings has
@@ -25438,7 +25525,7 @@
             }
 
             // Cut closing </div> tag.
-            echo substr( trim( $this->get_tabs_html() ), 0, - 6 );
+            echo substr( trim( $tabs_html ), 0, - 6 );
 
             return true;
         }
