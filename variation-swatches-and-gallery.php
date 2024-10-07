@@ -15,7 +15,7 @@
  * Plugin Name:       Variation Swatches and Gallery for WooCommerce
  * Plugin URI:        https://zqe.io/variation-swatches-and-gallery
  * Description:       Variation Swatches and Gallery for WooCommerce
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            ZQE
  * Author URI:        https://zqe.io
  * License:           GPL-2.0+
@@ -83,7 +83,7 @@ if ( ! function_exists( 'vsg_fs' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'VARIATION_SWATCHES_AND_GALLERY_VERSION', '1.0.2' );
+define( 'VARIATION_SWATCHES_AND_GALLERY_VERSION', '1.0.3' );
 
 /**
  * The code that runs during plugin activation.
