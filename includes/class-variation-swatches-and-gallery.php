@@ -98,7 +98,10 @@ class Variation_Swatches_And_Gallery {
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_requirement_hooks();
+		$this->define_notice_hooks();
+		
 		$this->define_widget_hooks();
+
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 	}
@@ -161,6 +164,20 @@ class Variation_Swatches_And_Gallery {
 	private function define_widget_hooks() {
 		$plugin_widget = new \Zqe\Variation_Swatches_And_Gallery_Widget( $this );
 		$this->loader->add_action( 'wp_dashboard_setup', $plugin_widget, 'dashboard_add_widgets' );
+	}
+
+
+	/**
+	 * Register all of the hooks related to the admin area functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_notice_hooks() {
+		$plugin_notice = new \Zqe\Variation_Swatches_And_Gallery_Notice( $this );
+		$this->loader->add_action('admin_notices', $plugin_notice, 'vsg_offer_help_notice');
+		$this->loader->add_action('wp_ajax_vsg_dismiss_help_notice', $plugin_notice, 'vsg_dismiss_help_notice');
 	}
 
 	/**
