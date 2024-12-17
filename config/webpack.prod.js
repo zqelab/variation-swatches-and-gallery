@@ -11,7 +11,7 @@ module.exports = merge(common, {
   output: {
     path: paths.build,
     publicPath: '/',
-    filename: '[name]/js/variation-swatches-and-gallery-[name].min.js',
+    filename: '[name]/js/variation-swatches-and-gallery-[name]-[hash].min.js',
   },
   module: {
     rules: [
@@ -36,7 +36,7 @@ module.exports = merge(common, {
   plugins: [
     // Extracts CSS into separate files
     new MiniCssExtractPlugin({
-      filename: '[name]/css/variation-swatches-and-gallery-[name].min.css',
+      filename: '[name]/css/variation-swatches-and-gallery-[name]-[hash].min.css',
       chunkFilename: '[id].css',
     }),
   ],

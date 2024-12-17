@@ -19,7 +19,6 @@
         this.init();
         this.update();
         this.tooltip();
-        console.log(this.product_variations)
     }
 
     // Extend the VSG prototype with methods.
@@ -363,6 +362,8 @@
     $('.variations_form:not(.vsg-loaded)').on('reset_data.vsg', function(e) {
         // Fetch the default gallery images stored in the _VSG object.
         var gallery_images = _VSG.gallery_images;
+
+        console.log(gallery_images)
 
         // Update the FlexSlider with the default gallery images.
         vsg_update_flexslider(gallery_images);

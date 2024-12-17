@@ -75,7 +75,7 @@ class Variation_Swatches_And_Gallery_Admin {
 
 		wp_enqueue_style(
 			$this->plugin->get_plugin_name(),
-			plugin_dir_url( __FILE__ ) . "css/variation-swatches-and-gallery-admin{$suffix}.css",
+			dirname( plugin_dir_url( __FILE__ ) ) . $this->plugin->get_helper()->manifest_file( 'admin.css' ),
 			array(),
 			$this->plugin->get_version(),
 			'all'
@@ -105,7 +105,7 @@ class Variation_Swatches_And_Gallery_Admin {
 
 		wp_enqueue_script(
 			$this->plugin->get_plugin_name(),
-			plugin_dir_url( __FILE__ ) . "js/variation-swatches-and-gallery-admin{$suffix}.js",
+			dirname( plugin_dir_url( __FILE__ ) ) . $this->plugin->get_helper()->manifest_file( 'admin.js' ),
 			array( 'jquery' ),
 			$this->plugin->get_version(),
 			false

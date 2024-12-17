@@ -169,4 +169,47 @@ class Variation_Swatches_And_Gallery_Helper {
 		}
 		return $attribute_counts;
 	}
+
+	/**
+	 * Retrieves the path to a file from the manifest.json.
+	 *
+	 * This function reads a `manifest.json` file located in the plugin directory
+	 * and returns the path associated with a given filename if it exists.
+	 * The function caches the manifest data on the first read to optimize performance.
+	 *
+	 * @param string $filename The name of the file to retrieve from the manifest.
+	 * @return string|false The mapped path to the file if found, or false if not found.
+	 */
+	public function manifest_file( $filename ) {
+		// Get the absolute path to the manifest.json file.
+		$manifest_path = dirname( plugin_dir_path( __FILE__ ) ) . '/manifest.json';
+
+		// Check if the manifest.json file exists before attempting to read it.
+		if ( ! file_exists( $manifest_path ) ) {
+			return false; // Return false if the manifest file does not exist.
+		}
+
+		// Static variable to cache the manifest data to avoid reading the file multiple times.
+		static $manifest = null;
+
+		// Load and decode the manifest.json file if it's not already loaded.
+		if ( is_null( $manifest ) ) {
+			$manifest_content = file_get_contents( $manifest_path ); // Read the content of the manifest file.
+			$manifest = json_decode( $manifest_content, true );      // Decode the JSON content to an associative array.
+
+			// If decoding fails or the result is not an array, initialize $manifest as an empty array.
+			if ( ! is_array( $manifest ) ) {
+				$manifest = array();
+			}
+		}
+
+		// Check if the given filename exists in the manifest data.
+		if ( isset( $manifest[ $filename ] ) ) {
+			return $manifest[ $filename ]; // Return the mapped path if found.
+		}
+
+		// Return false if the filename is not found in the manifest.
+		return false;
+	}
+
 }
