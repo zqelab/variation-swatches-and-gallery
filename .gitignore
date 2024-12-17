@@ -1,5 +1,9 @@
 composer.phar
 composer.lock
+/admin/css/
+/admin/js/
+/public/css/
+/public/js/
 /vendor/
 /node_modules/
 README.txt

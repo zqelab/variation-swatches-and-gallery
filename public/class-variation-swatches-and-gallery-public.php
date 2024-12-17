@@ -77,7 +77,7 @@ class Variation_Swatches_And_Gallery_Public {
 
 		wp_enqueue_style(
 			$this->plugin->get_plugin_name(),
-			plugin_dir_url( __FILE__ ) . "css/variation-swatches-and-gallery-public{$suffix}.css",
+			dirname( plugin_dir_url( __FILE__ ) ) . $this->plugin->get_helper()->manifest_file( 'public.css' ),
 			array(),
 			$this->plugin->get_version(),
 			'all'
@@ -125,7 +125,7 @@ class Variation_Swatches_And_Gallery_Public {
 
 		wp_enqueue_script(
 			$this->plugin->get_plugin_name(),
-			plugin_dir_url( __FILE__ ) . "js/variation-swatches-and-gallery-public{$suffix}.js",
+			dirname( plugin_dir_url( __FILE__ ) ) .$this->plugin->get_helper()->manifest_file( 'public.js' ),
 			array( 'jquery' ),
 			$this->plugin->get_version(),
 			true
@@ -1063,12 +1063,12 @@ class Variation_Swatches_And_Gallery_Public {
 				}
 
 				// Get additional gallery images defined in the specific meta key
-				$additional_image_ids = get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids' );
+				//$additional_image_ids = get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids' );
 
 				// If additional images are found, merge them into the main gallery array
-				if ( ! empty( $additional_image_ids ) ) {
-					$gallery_image_ids = array_merge( $gallery_image_ids, $additional_image_ids );
-				}
+				//if ( ! empty( $additional_image_ids ) ) {
+					//$gallery_image_ids = array_merge( $gallery_image_ids, $additional_image_ids );
+				//}
 			}
 		}
 

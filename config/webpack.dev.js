@@ -41,7 +41,7 @@ module.exports = merge(common, {
   plugins: [
     // Extracts CSS into separate files
     new MiniCssExtractPlugin({
-      filename: '[name]/css/variation-swatches-and-gallery-[name].css',
+      filename: '[name]/css/variation-swatches-and-gallery-[name]-[hash].css',
       chunkFilename: '[id].css',
     }),
   ],

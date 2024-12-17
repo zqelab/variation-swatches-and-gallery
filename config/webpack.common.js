@@ -1,5 +1,7 @@
 const paths = require('./paths')
 
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+
 module.exports = {
   // Where webpack looks to start building the bundle
   entry: {
@@ -16,8 +18,8 @@ module.exports = {
   // Where webpack outputs the assets and bundles
   output: {
 		path: paths.build,
-		filename: '[name]/js/variation-swatches-and-gallery-[name].js',
-		publicPath: '/app/plugins/variation-swatches-and-gallery/',
+		filename: '[name]/js/variation-swatches-and-gallery-[name]-[hash].js',
+		publicPath: '/',
 	},
   externals: {
     // require("jquery") is external and available
@@ -25,7 +27,9 @@ module.exports = {
     "jquery": "jQuery"
   },
   // Customize the webpack build process
-  plugins: [],
+  plugins: [
+    new WebpackManifestPlugin( )
+  ],
 
   // Determine how modules within the project are treated
   module: {
