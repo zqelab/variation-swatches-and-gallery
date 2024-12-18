@@ -150,39 +150,18 @@ class Variation_Swatches_And_Gallery_Public {
 	 * @access    public
 	 */
 	public function gallery_images() {
-
 		$gallery_images = array();
-
 		if ( is_singular( 'product' ) ) {
 			$product                   = wc_get_product( get_the_ID() );
-			$product_image_id          = absint( $product->get_image_id() );
 			$product_gallery_image_ids = $product->get_gallery_image_ids();
-
-			if ( $product_image_id ) {
-				array_unshift( $product_gallery_image_ids, $product_image_id );
-			}
-
-			if ( $product->is_type( 'variable' ) ) {
-				$variations = $product->get_available_variations();
-
-				if($variations) {
-					foreach ($variations as $key => $variation) {
-						# code...
-						array_unshift( $product_gallery_image_ids, $variation['image_id'] );
-					}
-				}
-			}
-
 			foreach ( $product_gallery_image_ids as $i => $attachment_id ) {
 				if ( wp_get_attachment_image_src( $attachment_id ) ) {
 					$gallery_images[ $i ] = apply_filters( 'woocommerce_single_product_image_thumbnail_html', wc_get_gallery_image_html( $attachment_id ), $attachment_id );
 				}
 			}
 		}
-
 		return $gallery_images;
 	}
-
 
 	/**
 	 * It takes an array of CSS properties and values and returns a string of CSS properties and values
@@ -940,65 +919,79 @@ class Variation_Swatches_And_Gallery_Public {
 	}
 
 	/**
-	 * It adds the stock quantity to the variation data that is sent to the browser when a user selects
-	 * a variation
+	 * Adds additional variation data, including stock quantity, add-to-cart details, and gallery images,
+	 * to the variation data sent to the browser when a user selects a variation.
 	 *
-	 * @param array  $data The variation data.
-	 * @param object $product The product object.
-	 * @param object $variation The variation object.
+	 * @param array   $data      The variation data.
+	 * @param WC_Product $product   The parent product object.
+	 * @param WC_Product_Variation $variation The variation product object.
 	 *
-	 * @return array The stock quantity of the variation.
+	 * @return array The modified variation data array including stock, add-to-cart, and gallery details.
 	 *
-	 * @since     1.0.0
-	 * @access    public
+	 * @since 1.0.0
+	 * @updated 2024-06-18 14:30
+	 * @access public
 	 */
 	public function woocommerce_available_variation_filter( $data, $product, $variation ) {
+		// Add stock quantity for the selected variation.
 		$data['stock_quantity'] = $variation->get_stock_quantity();
 
+		// Add variation-specific add-to-cart details.
 		$data['variation_add_to_cart_text']        = $variation->add_to_cart_text();
 		$data['variation_add_to_cart_url']         = $variation->add_to_cart_url();
 		$data['variation_add_to_cart_description'] = $variation->add_to_cart_description();
 
+		// Add parent product add-to-cart details.
 		$data['product_add_to_cart_text']        = $product->add_to_cart_text();
 		$data['product_id']                      = $product->get_id();
 		$data['product_add_to_cart_url']         = $product->add_to_cart_url();
 		$data['product_add_to_cart_description'] = $product->add_to_cart_description();
 
+		// Add the current URL.
 		$data['get_current_url'] = $this->get_current_url();
 
-		$product_id              = absint( $variation->get_parent_id() );
-		$variation_id            = absint( $variation->get_id() );
-		$parent_product          = wc_get_product( $product_id );
-		$gallery_image_ids       = (bool) get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids', true );
-		$variation_image_id      = absint( $variation->get_image_id() );
-		$parent_product_image_id = absint( $parent_product->get_image_id() );
+		// Get the parent product ID and variation ID.
+		$product_id   = absint( $variation->get_parent_id() );
+		$variation_id = absint( $variation->get_id() );
+
+		// Fetch the gallery image IDs from custom post meta or use the default gallery images.
+		$gallery_image_ids = (bool) get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids', true );
+		$variation_image_id = absint( $variation->get_image_id() );
 
 		if ( $gallery_image_ids ) {
+			// If custom gallery image IDs exist, fetch them as an array.
 			$gallery_image_ids = (array) get_post_meta( $variation_id, 'variation_swatches_and_gallery__gallery_image_ids' );
 		} else {
+			// Use the variation's default gallery images.
 			$gallery_image_ids = $variation->get_gallery_image_ids();
 		}
 
+		// Prepend the variation's main image ID to the gallery images.
 		if ( $variation_image_id ) {
 			array_unshift( $gallery_image_ids, $variation_image_id );
 		}
 
-		if ( ! empty( $parent_product_image_id ) ) {
-			array_unshift( $gallery_image_ids, $parent_product_image_id );
-		} else {
-			array_unshift( $gallery_image_ids, get_option( 'woocommerce_placeholder_image', 0 ) );
-		}
-
+		// Initialize an empty array for variation gallery images.
 		$data['variation_gallery_images'] = array();
 
+		// Populate the variation gallery images with HTML.
 		foreach ( $gallery_image_ids as $i => $variation_gallery_image_id ) {
-			if ( wp_get_attachment_image_src( $variation_gallery_image_id ) ) {
-				$data['variation_gallery_images'][ $i ] = apply_filters( 'woocommerce_single_product_image_thumbnail_html', wc_get_gallery_image_html( $variation_gallery_image_id ), $variation_gallery_image_id );
+			$image_src = wp_get_attachment_image_src( $variation_gallery_image_id );
+			
+			if ( $image_src ) {
+				$data['variation_gallery_images'][ $i ] = apply_filters(
+					'woocommerce_single_product_image_thumbnail_html',
+					wc_get_gallery_image_html( $variation_gallery_image_id ),
+					$variation_gallery_image_id
+				);
 			}
 		}
 
+		// Return the modified variation data.
 		return $data;
 	}
+
+
 	/**
 	 * Function for `woocommerce_ajax_variation_threshold` filter-hook.
 	 *
