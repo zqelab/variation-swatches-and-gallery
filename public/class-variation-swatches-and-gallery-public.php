@@ -393,8 +393,8 @@ class Variation_Swatches_And_Gallery_Public {
 		$style = 'select' !== $args['attribute_type'] ? 'display:none;' : '';
 		$class .= ' vsg-raw-select';
 
-		// If WVSG_DEBUG is defined and true, override the style to display the dropdown.
-		if (defined('WVSG_DEBUG') && true === \VARIATION_SWATCHES_AND_GALLERY_DEBUG) {
+		// If VARIATION_SWATCHES_AND_GALLERY_DEBUG is defined and true, override the style to display the dropdown.
+		if (defined('VARIATION_SWATCHES_AND_GALLERY_DEBUG') && true === \VARIATION_SWATCHES_AND_GALLERY_DEBUG) {
 			$style = '';
 		}
 
