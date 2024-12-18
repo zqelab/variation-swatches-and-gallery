@@ -87,7 +87,7 @@ if ( ! function_exists( 'vsg_fs' ) ) {
  * @since 1.0.0
  */
 define( 'VARIATION_SWATCHES_AND_GALLERY_VERSION', '1.0.4' );
-
+define( 'VARIATION_SWATCHES_AND_GALLERY_DEBUG', true );
 /**
  * The code that runs during plugin activation.
  *

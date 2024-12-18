@@ -326,19 +326,33 @@ class Variation_Swatches_And_Gallery_Public {
 	}
 
 	/**
-	 * It's a copy of the original function, but with the line ` = 'display:none';` added
+	 * Generate a dropdown for product variation attributes with optional display control.
 	 *
-	 * Long Description.
+	 * This function is an optimized version of the original, with added style control for hiding the dropdown based on the attribute type.
 	 *
-	 * @param     array $args    An array of arguments.
+	 * @param array $args {
+	 *     An array of arguments to customize the dropdown.
 	 *
-	 * @return    void
+	 *     @type array       $options          The available options for the dropdown.
+	 *     @type string      $attribute        The attribute name (e.g., 'color', 'size').
+	 *     @type WC_Product  $product          The WooCommerce product object.
+	 *     @type string      $selected         The selected value.
+	 *     @type string      $name             The HTML `name` attribute of the dropdown.
+	 *     @type string      $id               The HTML `id` attribute of the dropdown.
+	 *     @type string      $class            Additional CSS classes for the dropdown.
+	 *     @type string|bool $show_option_none Text for the "none" option or `false` to disable.
+	 *     @type bool        $is_archive       Indicates if this is an archive view.
+	 *     @type string      $attribute_type   The type of attribute (e.g., 'select').
+	 * }
 	 *
-	 * @since     1.0.0
-	 * @access    public
+	 * @return void
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @updated 2024-06-13
 	 */
 	public function dropdown_variation_attribute_options( $args = array() ) {
-
+		// Parse and merge arguments with default values.
 		$args = wp_parse_args(
 			apply_filters( 'woocommerce_dropdown_variation_attribute_options_args', $args ),
 			array(
@@ -351,54 +365,56 @@ class Variation_Swatches_And_Gallery_Public {
 				'class'            => '',
 				'show_option_none' => __( 'Choose an option', 'woocommerce' ),
 				'is_archive'       => false,
+				'attribute_type'   => 'select',
 			)
 		);
 
-		// Get selected value.
-		if ( false === $args['selected'] && $args['attribute'] && $args['product'] instanceof \WC_Product ) {
-			$selected_key = 'attribute_' . sanitize_title( $args['attribute'] );
+		// Extract arguments for easier access.
+		$options          = $args['options'];
+		$product          = $args['product'];
+		$attribute        = $args['attribute'];
+		$name             = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
+		$id               = $args['id'] ? $args['id'] : sanitize_title( $attribute );
+		$class            = $args['class'];
+		$show_option_none = (bool) $args['show_option_none'];
+		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' );
+
+		// Determine the selected value if not explicitly set.
+		if ( false === $args['selected'] && $attribute && $product instanceof \WC_Product ) {
+			$selected_key = 'attribute_' . sanitize_title( $attribute );
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended
-			$args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) /** phpcs:ignore */ : $args['product']->get_variation_default_attribute( $args['attribute'] );
+			$args['selected'] = isset( $_REQUEST[ $selected_key ] )
+				? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) )
+				: $product->get_default_attributes( $attribute );
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		}
 
-		$options               = $args['options'];
-		$product               = $args['product'];
-		$attribute             = $args['attribute'];
-		$name                  = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
-		$id                    = $args['id'] ? $args['id'] : sanitize_title( $attribute );
-		$class                 = $args['class'];
-		$show_option_none      = (bool) $args['show_option_none'];
-		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' ); // We'll do our best to hide the placeholder, but we'll need to show something when resetting options.
+		// Set style to hide the dropdown if the attribute type is not 'select'.
+		$style = 'select' !== $args['attribute_type'] ? 'display:none;' : '';
+		$class .= ' vsg-raw-select';
 
-		if ( empty( $options ) && ! empty( $product ) && ! empty( $attribute ) ) {
+		// If WVSG_DEBUG is defined and true, override the style to display the dropdown.
+		if (defined('WVSG_DEBUG') && true === \VARIATION_SWATCHES_AND_GALLERY_DEBUG) {
+			$style = '';
+		}
+
+		// Fetch options from product variation attributes if not provided.
+		if ( empty( $options ) && $product && $attribute ) {
 			$attributes = $product->get_variation_attributes();
-			$options    = $attributes[ $attribute ];
+			$options    = isset( $attributes[ $attribute ] ) ? $attributes[ $attribute ] : array();
 		}
 
-		$style = '';
-
-		if ( 'select' !== $args['attribute_type'] ) {
-			$style = 'display:none';
-			$class = ' vsg-raw-select';
-			if ( defined( 'WVSG_DEBUG' ) && true === \WVSG_DEBUG ) {
-				$style = '';
-			}
-		}
-
+		// Output the dropdown HTML.
 		echo '<select id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '" style="' . esc_attr( $style ) . '">';
+
+		// Display the "none" option if enabled.
 		echo '<option value="">' . esc_html( $show_option_none_text ) . '</option>';
 
+		// Populate the dropdown with options.
 		if ( ! empty( $options ) ) {
 			if ( $product && taxonomy_exists( $attribute ) ) {
-				// Get terms if this is a taxonomy - ordered. We need the names too.
-				$terms = wc_get_product_terms(
-					$product->get_id(),
-					$attribute,
-					array(
-						'fields' => 'all',
-					)
-				);
+				// Fetch terms for taxonomy-based attributes.
+				$terms = wc_get_product_terms( $product->get_id(), $attribute, array( 'fields' => 'all' ) );
 
 				foreach ( $terms as $term ) {
 					if ( in_array( $term->slug, $options, true ) ) {
@@ -406,13 +422,16 @@ class Variation_Swatches_And_Gallery_Public {
 					}
 				}
 			} else {
+				// For non-taxonomy attributes.
 				foreach ( $options as $option ) {
-					// This handles < 2.4.0 bw compatibility where text attributes were not sanitized.
-					$selected = sanitize_title( $args['selected'] ) === $args['selected'] ? selected( $args['selected'], sanitize_title( $option ), false ) : selected( $args['selected'], $option, false );
-					echo '<option value="' . esc_attr( $option ) . '" ' . esc_attr( $selected ) . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product ) ) . '</option>';
+					$selected = sanitize_title( $args['selected'] ) === $args['selected']
+						? selected( $args['selected'], sanitize_title( $option ), false )
+						: selected( $args['selected'], $option, false );
+					echo '<option value="' . esc_attr( $option ) . '" ' . $selected . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product ) ) . '</option>';
 				}
 			}
 		}
+
 		echo '</select>';
 	}
 
