@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 const { merge } = require('webpack-merge')
 
@@ -44,5 +45,8 @@ module.exports = merge(common, {
       filename: '[name]/css/variation-swatches-and-gallery-[name]-[hash].css',
       chunkFilename: '[id].css',
     }),
+    new WebpackManifestPlugin({
+      fileName: 'manifest.json'
+    })
   ],
 })

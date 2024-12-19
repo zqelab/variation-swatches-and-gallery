@@ -1,7 +1,5 @@
 const paths = require('./paths')
 
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-
 module.exports = {
   // Where webpack looks to start building the bundle
   entry: {
@@ -28,7 +26,6 @@ module.exports = {
   },
   // Customize the webpack build process
   plugins: [
-    new WebpackManifestPlugin( )
   ],
 
   // Determine how modules within the project are treated

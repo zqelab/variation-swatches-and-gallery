@@ -1,5 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+
 const { merge } = require('webpack-merge')
 
 const paths = require('./paths')
@@ -39,6 +41,9 @@ module.exports = merge(common, {
       filename: '[name]/css/variation-swatches-and-gallery-[name]-[hash].min.css',
       chunkFilename: '[id].css',
     }),
+    new WebpackManifestPlugin({
+      fileName: 'manifest.min.json'
+    })
   ],
   optimization: {
     minimize: true,

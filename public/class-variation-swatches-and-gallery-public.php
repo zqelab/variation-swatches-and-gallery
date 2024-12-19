@@ -77,7 +77,7 @@ class Variation_Swatches_And_Gallery_Public {
 
 		wp_enqueue_style(
 			$this->plugin->get_plugin_name(),
-			dirname( plugin_dir_url( __FILE__ ) ) . $this->plugin->get_helper()->manifest_file( 'public.css' ),
+			dirname( plugin_dir_url( __FILE__ ) ) . $this->plugin->get_helper()->manifest_file( $suffix, 'public.css' ),
 			array(),
 			$this->plugin->get_version(),
 			'all'
@@ -125,7 +125,7 @@ class Variation_Swatches_And_Gallery_Public {
 
 		wp_enqueue_script(
 			$this->plugin->get_plugin_name(),
-			dirname( plugin_dir_url( __FILE__ ) ) .$this->plugin->get_helper()->manifest_file( 'public.js' ),
+			dirname( plugin_dir_url( __FILE__ ) ) .$this->plugin->get_helper()->manifest_file( $suffix, 'public.js' ),
 			array( 'jquery' ),
 			$this->plugin->get_version(),
 			true

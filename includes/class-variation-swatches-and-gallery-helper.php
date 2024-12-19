@@ -180,9 +180,9 @@ class Variation_Swatches_And_Gallery_Helper {
 	 * @param string $filename The name of the file to retrieve from the manifest.
 	 * @return string|false The mapped path to the file if found, or false if not found.
 	 */
-	public function manifest_file( $filename ) {
+	public function manifest_file( $suffix = '', $filename ) {
 		// Get the absolute path to the manifest.json file.
-		$manifest_path = dirname( plugin_dir_path( __FILE__ ) ) . '/manifest.json';
+		$manifest_path = dirname( plugin_dir_path( __FILE__ ) ) . '/manifest' . $suffix . '.json';
 
 		// Check if the manifest.json file exists before attempting to read it.
 		if ( ! file_exists( $manifest_path ) ) {
