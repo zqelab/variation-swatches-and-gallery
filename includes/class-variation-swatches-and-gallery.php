@@ -205,6 +205,10 @@ class Variation_Swatches_And_Gallery {
 		$this->loader->add_action( 'woocommerce_product_after_variable_attributes', $plugin_admin, 'woocommerce_product_after_variable_attributes_action', 10, 3 );
 		$this->loader->add_action( 'admin_footer', $plugin_admin, 'admin_footer_action' );
 		$this->loader->add_action( 'woocommerce_save_product_variation', $plugin_admin, 'woocommerce_save_product_variation_action', 10, 2 );
+		
+		if ( defined( 'VARIATION_SWATCHES_AND_GALLERY_DEBUG' ) && true === VARIATION_SWATCHES_AND_GALLERY_DEBUG ) {
+			$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_meta_boxes');
+		}
 	}
 
 	/**

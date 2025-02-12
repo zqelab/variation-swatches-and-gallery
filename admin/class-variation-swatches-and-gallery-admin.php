@@ -571,4 +571,66 @@ class Variation_Swatches_And_Gallery_Admin {
 		// action...
 	}
 
+	/**
+     * Adds a meta box to the product edit screen to display all post meta data.
+     *
+     * This function adds a meta box named "Product Meta Data" to the product
+     * edit screen.  It displays all meta keys and values associated with the
+     * current product in a table format.
+     *
+     * @since 1.0.0  // Replace with your plugin's version
+     *
+     * @return void
+     */
+    public function add_meta_boxes() {
+        add_meta_box(
+            'product_meta_display', // Unique ID for the meta box
+            __( 'Product Meta Data', 'textdomain' ), // Title of the meta box
+            array( $this, 'display_product_meta_box_content' ), // Callback function to display the meta box content
+            'product', // Post type where the meta box should appear
+            'normal', // Context of the meta box (normal, side, advanced)
+             'high' // Priority of the meta box (high, core, default, low)
+        );
+    }
+
+    /**
+     * Callback function to display the content of the product meta data meta box.
+     *
+     * This function retrieves all post meta data for the given product ID and
+     * displays it in an HTML table.  It handles cases where no meta data is
+     * found and uses `esc_html()` and `print_r()` for safe output.
+     *
+     * @since 1.0.0 // Replace with your plugin's version
+     *
+     * @param WP_Post $post The current post object.
+     *
+     * @return void
+     */
+    public function display_product_meta_box_content( $post ) {
+        $meta_data = get_post_meta( $post->ID );
+
+        if ( ! empty( $meta_data ) ) {
+            echo '<div style="overflow-x: auto;">'; // Add horizontal scroll if table overflows
+            echo '<table class="widefat striped" style="width: 100%; table-layout: fixed;">'; // Use table-layout: fixed for better column width control
+            echo '<thead><tr><th style="width: 30%;">' . __( 'Meta Key', 'textdomain' ) . '</th><th>' . __( 'Meta Value', 'textdomain' ) . '</th></tr></thead>';
+            echo '<tbody>';
+
+            foreach ( $meta_data as $key => $value ) {
+                echo '<tr>';
+                echo '<td><strong>' . esc_html( $key ) . '</strong></td>';
+                // Improved display of meta values, especially arrays and objects
+                echo '<td><pre style="white-space: pre-wrap; word-wrap: break-word;">';
+                echo esc_html( print_r(get_post_meta($post->ID, $key), true) ); // Directly use the $value from the loop
+                echo '</pre></td>';
+                echo '</tr>';
+            }
+
+            echo '</tbody>';
+            echo '</table>';
+            echo '</div>';
+        } else {
+            echo '<p>' . __( 'No meta data found for this product.', 'textdomain' ) . '</p>';
+        }
+    }
+
 }

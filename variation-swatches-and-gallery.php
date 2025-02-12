@@ -22,14 +22,18 @@
  * Domain Path:       /languages
  */
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-    die;
-}
-
 /**
  * Autoload dependencies using Composer.
+ *
+ * Throws an error if the autoload file is not found to ensure the plugin
+ * cannot run without required dependencies.
+ *
+ * @throws RuntimeException If the autoload file is missing.
  */
+if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
+    throw new RuntimeException('Composer autoload file not found. Please run "composer install".');
+}
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 /**
@@ -82,78 +86,38 @@ if ( ! function_exists( 'vsg_fs' ) ) {
 }
 
 /**
- * Plugin version.
+ * Define plugin constants.
  *
  * @since 1.0.0
  */
 define( 'VARIATION_SWATCHES_AND_GALLERY_VERSION', '1.0.5' );
-define( 'VARIATION_SWATCHES_AND_GALLERY_DEBUG', false );
+
 /**
- * The code that runs during plugin activation.
+ * Registers the plugin's activation hook.
+ *
+ * This uses an arrow function for concise activation logic. However, for
+ * improved debugging and maintainability, using a named function is generally
+ * recommended (see example below).
  *
  * @since 1.0.0
  */
-function activate_variation_swatches_and_gallery() {
-    \Zqe\Variation_Swatches_And_Gallery_Activator::activate();
-}
+register_activation_hook( __FILE__, fn() => \Zqe\Variation_Swatches_And_Gallery_Activator::activate() );
 
 /**
- * The code that runs during plugin deactivation.
+ * Registers the plugin's deactivation hook.
+ *
+ * This uses an arrow function for concise deactivation logic. While concise,
+ * using a named function is generally recommended for deactivation hooks due to
+ * improved debugging and documentation possibilities.
  *
  * @since 1.0.0
  */
-function deactivate_variation_swatches_and_gallery() {
-    \Zqe\Variation_Swatches_And_Gallery_Deactivator::deactivate();
-}
-
-// Register activation and deactivation hooks.
-register_activation_hook( __FILE__, 'activate_variation_swatches_and_gallery' );
-register_deactivation_hook( __FILE__, 'deactivate_variation_swatches_and_gallery' );
+register_deactivation_hook( __FILE__, fn() => \Zqe\Variation_Swatches_And_Gallery_Deactivator::deactivate() );
 
 /**
- * Begins execution of the plugin.
+ * Initializes and runs theVariation Swatches and Gallery for WooCommerce plugin (using an arrow function).
+ * This is the most concise way for simple initialization tasks.
  *
- * @since 1.0.0
+ * @since 1.0.
  */
-function run_variation_swatches_and_gallery() {
-    // Initialize the core plugin class.
-    $plugin = new \Zqe\Variation_Swatches_And_Gallery();
-    $plugin->run();
-}
-
-// Hook to run the plugin after all plugins are loaded.
-add_action( 'plugins_loaded', 'run_variation_swatches_and_gallery', 25 );
-
-
-add_action('add_meta_boxes', function () {
-    add_meta_box(
-        'product_meta_display',
-        __('Product Meta Data', 'textdomain'),
-        function ($post) {
-            $meta_data = get_post_meta($post->ID);
-
-            if (!empty($meta_data)) {
-                echo '<div style="overflow-x: auto;">';
-                echo '<table class="widefat striped" style="max-width: 100%;">';
-                echo '<thead><tr><th style="width: 30%;">' . __('Meta Key', 'textdomain') . '</th><th>' . __('Meta Value', 'textdomain') . '</th></tr></thead>';
-                echo '<tbody>';
-
-                foreach ($meta_data as $key => $value) {
-                    echo '<tr>';
-                    echo '<td><strong>' . esc_html($key) . '</strong></td>';
-                    echo '<td><pre style="white-space: pre-wrap; word-wrap: break-word;">' . esc_html(print_r(get_post_meta($post->ID, $key), true)) . '</pre></td>';
-                    echo '</tr>';
-                }
-
-                echo '</tbody>';
-                echo '</table>';
-                echo '</div>';
-            } else {
-                echo '<p>' . __('No meta data found for this product.', 'textdomain') . '</p>';
-            }
-        },
-        'product',
-        'normal',
-        'high'
-    );
-});
+add_action( 'plugins_loaded', fn() => ( new \Zqe\Variation_Swatches_And_Gallery() )->run(), 25 );
